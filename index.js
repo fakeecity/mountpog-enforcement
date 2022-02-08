@@ -1,6 +1,6 @@
 require('dotenv').config()
 const fs = require('fs')
-const { Client, Intents } = require('discord.js');
+const { Client, Intents, Message } = require('discord.js');
 const myIntents = new Intents();
 myIntents.add(Intents.FLAGS.GUILD_PRESENCES, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.GUILDS, Intents.FLAGS.DIRECT_MESSAGES);
 
@@ -37,14 +37,14 @@ client.on("presenceUpdate", async function(oldMember, newMember) {
         currentGame = newMember.activities.filter(myActivity => myActivity.type == "PLAYING")[0]
         console.log(currentGame.name)
         if(String(currentGame.name).toLowerCase() == "osu!"){
-            fs.writeFile('hall-of-shame.txt', String(newMember.name), err => {
+            fs.writeFile('hall-of-shame.txt', String(newMember.user.tag), err => {
                 if (err) {
                     console.error(err)
                 }
                 else{
                     try {
                         newMember.user.send("you smell horrible, take a shower and come back in 30 mins");
-                        newMember.user.kick()
+                        //newMember.member.kick();
                     } 
                     catch (error) {
                         console.error(error);
@@ -52,7 +52,6 @@ client.on("presenceUpdate", async function(oldMember, newMember) {
                 }
                 
             })
-            console.log(newMember.activities[0])
         }
     }
 })
